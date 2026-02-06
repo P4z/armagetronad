@@ -11189,7 +11189,7 @@ public:
         SetMap(255,'y');
 
         //map 0 to o because they look similar
-        SetMap('0','o');
+        //SetMap('0','o');
 
         // TODO: make this data driven.
     }
