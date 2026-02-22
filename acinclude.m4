@@ -562,7 +562,7 @@ int main (int argc, char *argv[]) {
 
 ])
 
-dnl Copyright � 2008 Steven G. Johnson <stevenj@alum.mit.edu> 
+dnl Copyright © 2008 Steven G. Johnson <stevenj@alum.mit.edu> 
 dnl This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. 
 dnl This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
 dnl You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>. 
@@ -767,7 +767,7 @@ AC_LANG_RESTORE
 
 dnl GPLed checks whether the current version of GCC supports a certain flag
 dnl source: http://autoconf-archive.cryp.to/ax_cflags_gcc_option.html
-dnl Copyright � 2008 Guido U. Draheim <guidod@gmx.de>
+dnl Copyright © 2008 Guido U. Draheim <guidod@gmx.de>
 
 AC_DEFUN([AX_CFLAGS_GCC_OPTION_OLD], [dnl
 AS_VAR_PUSHDEF([FLAGS],[CFLAGS])dnl
