@@ -4,16 +4,20 @@
 
 test -r ChangeLog || touch -t 198001010000 ChangeLog
 MYDIR=`dirname $0`
+
+# remove legacy file name that collides with Autoconf's own version.m4
+rm -f version.m4
+
 if test -r batch/make/version; then
     echo "Generating version..."
-    echo "m4_define(AUTOMATIC_VERSION,["`sh batch/make/version $MYDIR`"])" > version.m4 || exit 1
+    echo "m4_define(AUTOMATIC_VERSION,["`sh batch/make/version $MYDIR`"])" > armagetron_version.m4 || exit 1
 
     # try to fix source epoch
     if test -e .git; then
         if SOURCE_DATE_EPOCH=`git show --pretty='format:%at' -q`; then
             git update-index --refresh > /dev/null
             if git diff-index --quiet HEAD --; then
-                echo "m4_define(SOURCE_DATE_EPOCH,${SOURCE_DATE_EPOCH})" >> version.m4 || exit 1
+                echo "m4_define(SOURCE_DATE_EPOCH,${SOURCE_DATE_EPOCH})" >> armagetron_version.m4 || exit 1
             fi
         fi
     fi

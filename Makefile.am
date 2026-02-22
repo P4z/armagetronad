@@ -52,7 +52,7 @@ dist-hook-scm:
 #	replace dynamic version in configure.ac with the version this build is configured with,
 #   as well as default package and program name
 	sed \
-	-e "s/m4_include(version.m4)//" \
+	-e "s/m4_include(\[armagetron_version.m4\])//" \
 	-e "s/AC_INIT(armagetronad,AUTOMATIC_VERSION)/AC_INIT(@prognamebase@,$(VERSION))/" \
 	-e "s/  progname=.*/  progname='@prognamebase@'/" \
 	-e "s/  progtitle=.*/  progtitle='@progtitle@'/" \
@@ -61,9 +61,9 @@ dist-hook-scm:
 #	same for src/macosx/config_common.h.in
 	sed -e "s/@ver""sion@/\"$(VERSION)\"/" < @srcdir@/src/macosx/config_common.h.in > $(distdir)/src/macosx/config_common.h.in
 
-#   regenerate dependant files so they no longer reference to the file "version.m4" which will be removed
+#   regenerate dependant files so they no longer reference to the generated version macro file which will be removed
 	cp @srcdir@/bootstrap.sh $(distdir)
-	cd $(distdir); rm version.m4; sh ./bootstrap.sh
+	cd $(distdir); rm -f armagetron_version.m4 version.m4; sh ./bootstrap.sh
 	rm -rf $(distdir)/autom4te.cache
 
 dist-hook:
@@ -86,7 +86,7 @@ dist-hook:
 	rm -f $(distdir)/language/*.bak
 
 # 	generate ChangeLog and configure.ac
-	test -r $(srcdir)/version.m4 && $(MAKE) dist-hook-scm || echo "Version not from SCM, skipping version fixing."
+	test -r $(srcdir)/armagetron_version.m4 && $(MAKE) dist-hook-scm || echo "Version not from SCM, skipping version fixing."
 
 if USE_UNINSTALL
 

@@ -2,7 +2,7 @@
 dnl AC_DEFUN([AUTOMATIC_VERSION],syscmd([sh batch/make/version .]))
 
 dnl but have to do this with version generated in bootstrap.sh instead for some reason
-m4_include(version.m4)
+m4_include([armagetron_version.m4])
 
 dnl Comment this out to disable autoconf custom directories: 
 m4_include(accustomdir.m4)

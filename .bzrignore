@@ -30,6 +30,7 @@ Makefile.in
 ./missing
 ./touch
 ./version.m4
+./armagetron_version.m4
 src/doc/commands.txt
 ./.changetag
 Makefile

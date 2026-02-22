@@ -926,4 +926,4 @@ clean: intermediateclean
 distclean: clean
 	rm -rf $(TARBALL) CI_INFO
 	cd ${top_srcdir} && ./bootstrap.sh
-	cat ${top_srcdir}/version.m4
+	cat ${top_srcdir}/armagetron_version.m4
