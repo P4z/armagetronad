@@ -163,7 +163,7 @@ aa_$1=\${$1}\${$1_suffix}\${progdir_suffix}
 # 4. human-form of the default value
 AC_DEFUN([AC_ARG_DIR],
 [
-AC_ARG_WITH([$1],AC_HELP_STRING([--with-$1=DIR],[directory used for $3 (default: $4)]),[$1=${enableval}],[$1=$2
+AC_ARG_WITH([$1],AS_HELP_STRING([--with-$1=DIR],[directory used for $3 (default: $4)]),[$1=${withval}],[$1=$2
 $1_enabled=no])
 ]
 )
@@ -184,7 +184,7 @@ AC_SUBST([$1])
 )
 AC_DEFUN([AC_AA_PATH_WITH],
 [
-AC_ARG_WITH([$1],AC_HELP_STRING([--with-$1=DIR],[$3 (default: $1)]),[$1=${enableval}],[$1=$2
+AC_ARG_WITH([$1],AS_HELP_STRING([--with-$1=DIR],[$3 (default: $1)]),[$1=${withval}],[$1=$2
 $1_enabled=no])
 AC_AA_PATH_RAW([$1])
 AC_SUBST([$1])
@@ -368,7 +368,7 @@ dnl Detect the library and include paths for ZThreads, perform some test
 dnl compilations.
 dnl
 dnl Should be used in AC_PROG_CC mode before the swtich to C++ if any is made
-dnl (eg before AC_LANG_CPLUSPLUS)
+dnl (eg before AC_LANG([C++]))
 dnl
 dnl --with-zthread-prefix : Skip detection, use this general path
 dnl --with-zthread-exec-prefix : Skip detecting the zthread-config tool
@@ -441,7 +441,7 @@ dnl
         fi
         if test "x$no_zthread" = xyes || test NONE = ${extra_flags} ; then
         no_zthread=""
-        AC_TRY_RUN([
+      AC_RUN_IFELSE([AC_LANG_SOURCE([
 
 
 #include <stdio.h>
@@ -488,7 +488,7 @@ int main (int argc, char *argv[]) {
 
 }
 
-],, no_zthread=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
+])], [], [no_zthread=yes], [echo $ac_n "cross compiling; assumed OK... $ac_c"])
       fi
     done
     CC=${CC_OLD}
@@ -527,8 +527,7 @@ int main (int argc, char *argv[]) {
 
           echo $LIBS;
 
-          AC_TRY_LINK([#include "zthread/Task.h"], 
-                      [ return 0; ], [
+          AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include "zthread/Task.h"]], [[ return 0; ]])], [
           echo "*** The test program compiled, but did not run. This usually means"
           echo "*** that the run-time linker is not finding ZThread or finding the wrong"
           echo "*** version of ZThread. If it is not finding ZThread, you'll need to set your"
@@ -563,7 +562,7 @@ int main (int argc, char *argv[]) {
 
 ])
 
-dnl Copyright © 2008 Steven G. Johnson <stevenj@alum.mit.edu> 
+dnl Copyright ï¿½ 2008 Steven G. Johnson <stevenj@alum.mit.edu> 
 dnl This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. 
 dnl This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
 dnl You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>. 
@@ -589,7 +588,7 @@ if test x"$PTHREAD_LIBS$PTHREAD_CFLAGS" != x; then
 	save_LIBS="$LIBS"
 	LIBS="$PTHREAD_LIBS $LIBS"
 	AC_MSG_CHECKING([for pthread_join in LIBS=$PTHREAD_LIBS with CFLAGS=$PTHREAD_CFLAGS])
-	AC_TRY_LINK_FUNC(pthread_join, acx_pthread_ok=yes)
+   AC_LINK_IFELSE([AC_LANG_CALL([], [pthread_join])], [acx_pthread_ok=yes])
 	AC_MSG_RESULT($acx_pthread_ok)
 	if test x"$acx_pthread_ok" = xno; then
 		PTHREAD_LIBS=""
@@ -686,11 +685,11 @@ for flag in $acx_pthread_flags; do
 	# pthread_cleanup_push because it is one of the few pthread
 	# functions on Solaris that doesn't have a non-functional libc stub.
 	# We try pthread_create on general principles.
-	AC_TRY_LINK([#include <pthread.h>],
-		    [pthread_t th; pthread_join(th, 0);
-		    pthread_attr_init(0); pthread_cleanup_push(0, 0);
-		    pthread_create(0,0,0,0); pthread_cleanup_pop(0); ],
-		    [acx_pthread_ok=yes])
+   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pthread.h>]], [[
+          pthread_t th; pthread_join(th, 0);
+          pthread_attr_init(0); pthread_cleanup_push(0, 0);
+          pthread_create(0,0,0,0); pthread_cleanup_pop(0);
+   ]])], [acx_pthread_ok=yes])
 
 	LIBS="$save_LIBS"
 	CFLAGS="$save_CFLAGS"
@@ -716,8 +715,8 @@ if test "x$acx_pthread_ok" = xyes; then
 	AC_MSG_CHECKING([for joinable pthread attribute])
 	attr_name=unknown
 	for attr in PTHREAD_CREATE_JOINABLE PTHREAD_CREATE_UNDETACHED; do
-	    AC_TRY_LINK([#include <pthread.h>], [int attr=$attr; return attr;],
-			[attr_name=$attr; break])
+       AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pthread.h>]], [[int attr=$attr; return attr;]])],
+         [attr_name=$attr; break])
 	done
 	AC_MSG_RESULT($attr_name)
 	if test "$attr_name" != PTHREAD_CREATE_JOINABLE; then
@@ -768,7 +767,7 @@ AC_LANG_RESTORE
 
 dnl GPLed checks whether the current version of GCC supports a certain flag
 dnl source: http://autoconf-archive.cryp.to/ax_cflags_gcc_option.html
-dnl Copyright © 2008 Guido U. Draheim <guidod@gmx.de>
+dnl Copyright ï¿½ 2008 Guido U. Draheim <guidod@gmx.de>
 
 AC_DEFUN([AX_CFLAGS_GCC_OPTION_OLD], [dnl
 AS_VAR_PUSHDEF([FLAGS],[CFLAGS])dnl
@@ -783,7 +782,7 @@ in "-pedantic -Werror % m4_ifval($2,$2,-option)"  dnl   GCC
    "-pedantic % m4_ifval($2,$2,-option) %% no, obsolete"  dnl new GCC
    #
 do FLAGS="$ac_save_[]FLAGS "`echo $ac_arg | sed -e 's,%%.*,,' -e 's,%,,'`
-   AC_TRY_COMPILE([],[return 0;],
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[return 0;]])],
    [VAR=`echo $ac_arg | sed -e 's,.*% *,,'` ; break])
 done
  FLAGS="$ac_save_[]FLAGS"
@@ -812,14 +811,14 @@ AS_VAR_PUSHDEF([VAR],[ac_cv_cxxflags_gcc_option_$2])dnl
 AC_CACHE_CHECK([m4_ifval($1,$1,FLAGS) for gcc m4_ifval($2,$2,-option)],
 VAR,[VAR="no, unknown"
  AC_LANG_SAVE
- AC_LANG_CPLUSPLUS
+ AC_LANG([C++])
  ac_save_[]FLAGS="$[]FLAGS"
 for ac_arg dnl
 in "-pedantic -Werror % m4_ifval($2,$2,-option)"  dnl   GCC
    "-pedantic % m4_ifval($2,$2,-option) %% no, obsolete"  dnl new GCC
    #
 do FLAGS="$ac_save_[]FLAGS "`echo $ac_arg | sed -e 's,%%.*,,' -e 's,%,,'`
-   AC_TRY_COMPILE([],[return 0;],
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[return 0;]])],
    [VAR=`echo $ac_arg | sed -e 's,.*% *,,'` ; break])
 done
  FLAGS="$ac_save_[]FLAGS"
@@ -854,7 +853,7 @@ in "-pedantic -Werror % m4_ifval($1,$1,-option)"  dnl   GCC
    "-pedantic % m4_ifval($1,$1,-option) %% no, obsolete"  dnl new GCC
    #
 do FLAGS="$ac_save_[]FLAGS "`echo $ac_arg | sed -e 's,%%.*,,' -e 's,%,,'`
-   AC_TRY_COMPILE([],[return 0;],
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[return 0;]])],
    [VAR=`echo $ac_arg | sed -e 's,.*% *,,'` ; break])
 done
  FLAGS="$ac_save_[]FLAGS"
@@ -883,14 +882,14 @@ AS_VAR_PUSHDEF([VAR],[ac_cv_cxxflags_gcc_option_$1])dnl
 AC_CACHE_CHECK([m4_ifval($2,$2,FLAGS) for gcc m4_ifval($1,$1,-option)],
 VAR,[VAR="no, unknown"
  AC_LANG_SAVE
- AC_LANG_CPLUSPLUS
+ AC_LANG([C++])
  ac_save_[]FLAGS="$[]FLAGS"
 for ac_arg dnl
 in "-pedantic -Werror % m4_ifval($1,$1,-option)"  dnl   GCC
    "-pedantic % m4_ifval($1,$1,-option) %% no, obsolete"  dnl new GCC
    #
 do FLAGS="$ac_save_[]FLAGS "`echo $ac_arg | sed -e 's,%%.*,,' -e 's,%,,'`
-   AC_TRY_COMPILE([],[return 0;],
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[return 0;]])],
    [VAR=`echo $ac_arg | sed -e 's,.*% *,,'` ; break])
 done
  FLAGS="$ac_save_[]FLAGS"

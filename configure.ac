@@ -8,7 +8,7 @@ dnl Comment this out to disable autoconf custom directories:
 m4_include(accustomdir.m4)
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(armagetronad,AUTOMATIC_VERSION)
+AC_INIT([armagetronad],[AUTOMATIC_VERSION])
 
 dnl FIXME: remove this in the future, when automake decides to actually set datarootdir by default
 dnl http://www.gnu.org/software/hello/manual/autoconf/Changed-Directory-Variables.html
@@ -72,21 +72,20 @@ AC_ARG_VAR(CXX_ABI,[Autopackage C++ ABI version.])
 AC_ARG_VAR(APBUILD_STATIC,[Autopackage static libraries.])
 
 dnl a modern autoconf is required to process this
-AC_PREREQ(2.50)
+AC_PREREQ([2.72])
 
 PKG_PROG_PKG_CONFIG
 
 build_regular=true
 
 have_lzma=false
-    AC_ARG_WITH(maxclients, AC_HELP_STRING([--with-maxclients],[sets the hardcoded limit for the number of connected clients (default: 16 for clients and 32 for dedicated servers)]),
+    AC_ARG_WITH(maxclients, AS_HELP_STRING([--with-maxclients],[sets the hardcoded limit for the number of connected clients (default: 16 for clients and 32 for dedicated servers)]),
 [ 
     AC_DEFINE_UNQUOTED(MAXCLIENTS,${withval},maximal number of clients)
 ])
 
 AC_ARG_ENABLE(dedicated,
-     AC_HELP_STRING([--enable-dedicated],
-		[enables dedicated server; otherwise, compile a client (default=disabled)]),
+     AS_HELP_STRING([--enable-dedicated],[enables dedicated server; otherwise, compile a client (default=disabled)]),
      [case "${enableval}" in
        yes) build_dedicated=true
 			build_regular=false
@@ -104,8 +103,7 @@ dnl                          a dedicated server (default=enabled)],,
 dnl enable_glout=yes)
 
 AC_ARG_ENABLE(master,
-     AC_HELP_STRING([--enable-master],
-		[Build the master server]),
+     AS_HELP_STRING([--enable-master],[Build the master server]),
      [case "${enableval}" in
        yes) armamaster=true ;;
        no)  armamaster=false ;;
@@ -115,8 +113,7 @@ AC_ARG_ENABLE(master,
 AM_CONDITIONAL(BUILDMASTER, test x$armamaster = xtrue)
 
 AC_ARG_ENABLE(main,
-     AC_HELP_STRING([--enable-main],
-		[Build the main program]),
+     AS_HELP_STRING([--enable-main],[Build the main program]),
      [case "${enableval}" in
        yes) armamain=true ;;
        no)  armamain=false ;;
@@ -124,8 +121,7 @@ AC_ARG_ENABLE(main,
      esac],[armamain=true])
 
 AC_ARG_ENABLE(glout,
-     AC_HELP_STRING([--enable-glout],
-		[Inverse alias of --enable-dedicated]),
+     AS_HELP_STRING([--enable-glout],[Inverse alias of --enable-dedicated]),
      [case "${enableval}" in
        yes) build_dedicated=false
 			build_regular=true
@@ -161,39 +157,33 @@ AC_SUBST(build_dedicated)
 AC_SUBST(build_regular)
 
 AC_ARG_ENABLE(memmanager,
-	AC_HELP_STRING([--enable-memmanager],
-		[enable custom memory manager on systems that allow it (default=disabled)]),,
+	AS_HELP_STRING([--enable-memmanager],[enable custom memory manager on systems that allow it (default=disabled)]),,
 enable_memmanager=no)
 
 AC_ARG_ENABLE(music,
-	AC_HELP_STRING([--enable-music],
-		[compile in support for background music (default=disabled)]),,
+	AS_HELP_STRING([--enable-music],[compile in support for background music (default=disabled)]),,
 enable_music=no)
 
 AC_ARG_ENABLE(respawn,
-	AC_HELP_STRING([--enable-respawn],
-		[enable unsupported, hacky, impossible to deactivate at runtime, deathmatch mode. Use at your own risk. (default=disabled)]),,
+	AS_HELP_STRING([--enable-respawn],[enable unsupported, hacky, impossible to deactivate at runtime, deathmatch mode. Use at your own risk. (default=disabled)]),,
 enable_respawn=no)
 
 AC_ARG_ENABLE(krawall,
-	AC_HELP_STRING([--enable-krawall],
-		[enable special visuals for the krawall gaming network (default=disabled)]),,
+	AS_HELP_STRING([--enable-krawall],[enable special visuals for the krawall gaming network (default=disabled)]),,
 enable_krawall=no)
 
 dnl start alias group
-AC_ENABLE(armathentication,
-    [echo $enableval; case "${enableval}" in
+AC_ARG_ENABLE([armathentication],[  --enable-armathentication],[echo $enableval; case "${enableval}" in
        yes) enable_armathentication=yes
 	   	;;
        no)  enable_armathentication=no
 	    ;;
        *) AC_MSG_ERROR(bad value ${enableval} for --enable-armathentication) ;;
-     esac],enable_armathentication=yes
-     )
+     esac],[enable_armathentication=yes
+     ])
 
 AC_ARG_ENABLE(authentication,
-    AC_HELP_STRING([--enable-authentication],
-		[enable server side code for the krawall style user authentication (default=enabled)]),
+    AS_HELP_STRING([--enable-authentication],[enable server side code for the krawall style user authentication (default=enabled)]),
     [case "${enableval}" in
        yes) enable_armathentication=yes
 	   	;;
@@ -204,42 +194,35 @@ AC_ARG_ENABLE(authentication,
     )
 dnl end alias group
 AC_ARG_ENABLE(automakedefaults,
-	AC_HELP_STRING([--enable-automakedefaults],
-		[enforce the default installation directories as set by automake. localstatedir=prefix/var violates the FHS, so this is off by default.]),,
+	AS_HELP_STRING([--enable-automakedefaults],[enforce the default installation directories as set by automake. localstatedir=prefix/var violates the FHS, so this is off by default.]),,
 enable_automakedefaults=no enable_automakedefaults_default=yes)
 
 AC_ARG_ENABLE(dirty,
-	AC_HELP_STRING([--enable-dirty],
-		[allow dirty GL initialisation (like used with SDL 1.0) even if you have SDL 1.1 or up (default=disabled)]),,
+	AS_HELP_STRING([--enable-dirty],[allow dirty GL initialisation (like used with SDL 1.0) even if you have SDL 1.1 or up (default=disabled)]),,
 enable_dirty=no)
 
 AC_ARG_ENABLE(sysinstall,
-	AC_HELP_STRING([--enable-sysinstall],
-		[will install configuration files to /etc/armagetron and create a user if possible (default=enabled)]),,
+	AS_HELP_STRING([--enable-sysinstall],[will install configuration files to /etc/armagetron and create a user if possible (default=enabled)]),,
 enable_sysinstall=yes)
 
 AC_ARG_ENABLE(useradd,
-	AC_HELP_STRING([--enable-useradd],
-		[will create a user during installation (default=enabled; requires --enable-sysinstall or a manual call of the sysinstall script)]),,
+	AS_HELP_STRING([--enable-useradd],[will create a user during installation (default=enabled; requires --enable-sysinstall or a manual call of the sysinstall script)]),,
 enable_useradd=yes enable_useradd_default=yes)
 AC_SUBST(enable_useradd)
 
 AC_ARG_ENABLE(etc,
-	AC_HELP_STRING([--enable-etc],
-		[will create links in /etc to the configuration files (default=enabled; requires --enable-sysinstall or a manual call of the sysinstall script)]),,
+	AS_HELP_STRING([--enable-etc],[will create links in /etc to the configuration files (default=enabled; requires --enable-sysinstall or a manual call of the sysinstall script)]),,
 enable_etc=yes enable_etc_default=yes)
 AC_SUBST(enable_etc)
 
 AC_ARG_ENABLE(desktop,
-	AC_HELP_STRING([--enable-desktop],
-		[will try to integrate into your desktop environment via menu entries (default=enabled; requires --enable-sysinstall or a manual call of the sysinstall script)]),,
+	AS_HELP_STRING([--enable-desktop],[will try to integrate into your desktop environment via menu entries (default=enabled; requires --enable-sysinstall or a manual call of the sysinstall script)]),,
 enable_desktop=yes)
 AC_SUBST(enable_desktop)
 
 initdir=location
 AC_ARG_ENABLE(initscripts,
-	AC_HELP_STRING([--enable-initscripts=location],
-		[will install init scripts for the servers into <location>(default=enabled; requires --enable-sysinstall; <location> defaults to /etc/init.d or /etc/rc.d)]),
+	AS_HELP_STRING([--enable-initscripts=location],[will install init scripts for the servers into <location>(default=enabled; requires --enable-sysinstall; <location> defaults to /etc/init.d or /etc/rc.d)]),
 test "x${enableval}" = "xyes" || initdir=${enableval}
 test "x${enableval}" = "xno" || enable_initscripts=yes,
 enable_initscripts=yes enable_initscripts_default=yes
@@ -249,14 +232,12 @@ initdir=location)
 AC_SUBST(enable_initscripts)
 
 AC_ARG_ENABLE(restoreold,
-	AC_HELP_STRING([--enable-restoreold],
-		[will try to install links to previous installation on uninstallation in multiver mode (default=enabled; requires --enable-sysinstall or a manual call of the sysinstall script)]),,
+	AS_HELP_STRING([--enable-restoreold],[will try to install links to previous installation on uninstallation in multiver mode (default=enabled; requires --enable-sysinstall or a manual call of the sysinstall script)]),,
 enable_restoreold=yes)
 AC_SUBST(enable_restoreold)
 
 AC_ARG_ENABLE(uninstall,
-	AC_HELP_STRING([--enable-uninstall@<:@=cmd@:>@],
-		[will install an uninstaller script (default=enabled)]),
+	AS_HELP_STRING([--enable-uninstall@<:@=cmd@:>@],[will install an uninstaller script (default=enabled)]),
 if test "$enableval" = "no"; then
 	enable_uninstall=no
 else
@@ -267,8 +248,7 @@ enable_uninstall=yes)
 AC_SUBST(external_uninstall_cmd)
 
 AC_ARG_ENABLE(multiver,
-	AC_HELP_STRING([--enable-multiver@<:@=slot@:>@],
-		[allow multiple versions to coexist by storing them in different directories (default=disabled)]),
+	AS_HELP_STRING([--enable-multiver@<:@=slot@:>@],[allow multiple versions to coexist by storing them in different directories (default=disabled)]),
 if test "$enableval" = "no"; then
 	enable_multiver=no
 else
@@ -278,13 +258,11 @@ fi,
 enable_multiver=no)
 
 AC_ARG_ENABLE(games,
-	AC_HELP_STRING([--enable-games],
-		[decorates all installation paths with "games" (default=enabled)]),,
+	AS_HELP_STRING([--enable-games],[decorates all installation paths with "games" (default=enabled)]),,
 enable_games=yes)
 
 AC_ARG_ENABLE(enginecoredebug,
-     AC_HELP_STRING([--enable-enginecoredebug],
-		[Apply debugging options to engine core (for DEBUGLEVEL>0, defaults to enabled)]),
+     AS_HELP_STRING([--enable-enginecoredebug],[Apply debugging options to engine core (for DEBUGLEVEL>0, defaults to enabled)]),
      [case "${enableval}" in
        yes) enginecoredebug=true ;;
        no)  enginecoredebug=false ;;
@@ -402,7 +380,7 @@ dnl AC_LIBTOOL_DLOPEN
 dnl AM_PROG_LIBTOOL
 
 dnl Header file
-AC_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 
 dnl Checks for programs.
@@ -543,7 +521,7 @@ case "$target" in
     *-*-aix*)
 	AC_DEFINE(AIX, 1, [AIX])
         MATHLIB=""
-        if test x$ac_cv_prog_gcc = xyes; then
+        if test x$ac_cv_c_compiler_gnu = xyes; then
             CXXFLAGS="$CXXFLAGS -mthreads"
 	fi
         SYS_GL_LIB=""
@@ -824,7 +802,7 @@ You are using PGCC to compile ${progtitle}. Due to a bug in PGCC,
 exception handling needs to be disabled. This makes the server
 mode vulnerable to an attack that causes the server to block or
 crash. (The attack is still detected, but nothing can be done 
-about it. You will get the message \"I told you not to use PGCC!\")
+about it. You will get the message "I told you not to use PGCC!")
 
 
 ])
@@ -833,7 +811,9 @@ fi
 
 
 dnl Checks for header files.
-AC_HEADER_STDC
+AC_CHECK_INCLUDES_DEFAULT
+AC_PROG_EGREP
+
 AC_CHECK_HEADERS(unistd.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
@@ -966,8 +946,7 @@ AC_AA_PATH(logdir,${localstatedir}/log,[server logs],[LOCALSTATEDIR/log])
 oldvardirdefault=/var/${progname}/var
 test "x$enable_games" = "xyes" && oldvardirdefault=/var/games/${progname}/var
 AC_AA_PATH_WITH(oldvardir,\${prefix}${oldvardirdefault},[directory where the state files of a previous version may be kept; they'll be moved to their new place on installation.],[oldvardir])
-AC_ARG_ENABLE(migratestate,AC_HELP_STRING([--enable-migratestate],
-        [tries to move old server state data to its new location (default=enabled)]),,
+AC_ARG_ENABLE(migratestate,AS_HELP_STRING([--enable-migratestate],[tries to move old server state data to its new location (default=enabled)]),,
         enable_migratestate=yes)
 AC_SUBST_UNIVERSAL(enable_migratestate)
 
@@ -999,7 +978,7 @@ export CPPFLAGS
 export CXXFLAGS
 export LIBS
 
-AC_OUTPUT(src/Makefile
+AC_CONFIG_FILES([src/Makefile
 src/first/Makefile
 Makefile
 batch/Makefile
@@ -1019,7 +998,8 @@ docker/build/context/version.sh
 docker/deploy/targets.sh
 desktop/armagetronad.desktop
 desktop/armagetronad.appdata.xml
-)
+])
+AC_OUTPUT
 
 # m4_define(FULLEVAL,stage1=`eval echo $1`; stage2 
 

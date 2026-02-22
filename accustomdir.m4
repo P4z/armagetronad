@@ -565,8 +565,7 @@ if test "$ac_init_help" = "recursive"; then
       $SHELL $ac_srcdir/configure  --help=recursive
     elif test -f $ac_srcdir/configure.ac ||
 	   test -f $ac_srcdir/configure.in; then
-      echo
-      $ac_configure --help
+      AC_MSG_WARN([no configuration information is in $ac_dir])
     else
       AC_MSG_WARN([no configuration information is in $ac_dir])
     fi
