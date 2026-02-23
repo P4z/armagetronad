@@ -454,7 +454,7 @@ dnl
 int main (int argc, char *argv[]) {
 
   int major, minor, micro;
-  char tmp_version[256];
+   char tmp_version@<:@256@:>@;
 
   { FILE *fp = fopen("conf.zthreadtest", "a"); if ( fp ) fclose(fp); }
 
